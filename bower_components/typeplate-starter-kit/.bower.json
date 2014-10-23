@@ -1,0 +1,26 @@
+{
+  "name": "typeplate",
+  "version": "1.1.4",
+  "author": "Dennis Gaebel and Zachary Kain",
+  "homepage": "https://github.com/typeplate/starter-kit",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/typeplate/starter-kit.git"
+  },
+  "licenses": [
+    {
+      "type": "CC by 3.0",
+      "url": "http://creativecommons.org/licenses/by/3.0"
+    }
+  ],
+  "_release": "1.1.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.1.4",
+    "commit": "f9b34c31e2915f0017cea971287556efffa81802"
+  },
+  "_source": "git://github.com/typeplate/starter-kit.git",
+  "_target": "~1.1.4",
+  "_originalSource": "typeplate-starter-kit",
+  "_direct": true
+}
