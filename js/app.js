@@ -8,7 +8,8 @@ function app(){
     loader.load(
         {url: "./bower_components/jquery/dist/jquery.min.js"},
         {url: "./bower_components/lodash/dist/lodash.min.js"},
-        {url: "./bower_components/pathjs/path.min.js"}
+        {url: "./bower_components/pathjs/path.min.js"},
+        {url: "./bower_components/foundation/foundation.js"}
     ).then(function(){
         _.templateSettings.interpolate = /{([\s\S]+?)}/g;
 
