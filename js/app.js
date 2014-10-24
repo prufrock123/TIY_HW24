@@ -26,8 +26,6 @@ function app(){
 
 }
 
-
-
 // http://api.yummly.com/v1/api/recipes?_app_id=app-id
 // &_app_key=app-key&your _search_parameters
 
@@ -37,7 +35,7 @@ function LeftOver(options) {
         throw new Error("Not going to work w/o API key brah");
     }
     this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
-    this.ingredient = "&allowedIngredient[]="
+    this.ingredient = "&allowedIngredient[]=";
     this.app_id = options.app_id;    
     this.app_key = options.app_key;
     this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key + "&q=onion+soup";
@@ -51,13 +49,17 @@ function joyRide(){
     $(document).foundation('joyride', 'start');
 }
 
-LeftOver.prototype.pullRecipes = function(parameters) {
-    "use strict";
-
+LeftOver.prototype.createParametersObject = function() {
     var parameters = {};
     $('form [name]').each(function(){
     parameters[this.name] = this.value;
     });
+};
+
+LeftOver.prototype.pullRecipes = function(callback) {
+    "use strict";
+
+    callback();
 
     // console.dir(parameters);
     // debugger;
@@ -69,37 +71,23 @@ LeftOver.prototype.pullRecipes = function(parameters) {
         // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
     .then(function(data){
         // console.log(data);
-        return data;
+        return data.matches;
     });
 };
 
+LeftOver.prototype.loadTemplate = function(template) {
+    return $.get('./templates/' + template + '.html').then(function(htmlString){
+        return htmlString;
+    });
+};
 
-// this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
-
-
-
-
-
-
-// Turning our completed form into a JSON object that we can pass to the pullRecipes function.
-// var form = document.querySelector("form");
-
-// function ConvertFormToJSON(form){
-//     var array = form.serializeArray();
-//     var json = {};
-
-//     jQuery.each(array, function() {
-//         json[this.name] = this.value || ''; 
-//     });
-// }
-
-// var parameters = 
-
-// {
-//     protein = value from form,
-//     vegetable = value from form,
-//     carb = value from form
-// }
+LeftOver.prototype.putRecipeOnPage = function(html, data) {
+    // debugger;
+    document.querySelector('#recipes').innerHTML = 
+    data.map(function(element) {
+        return _.template(html, element);
+    }).join("");
+};
 
 LeftOver.prototype.Routing = function(){
     "use strict";
@@ -109,10 +97,12 @@ LeftOver.prototype.Routing = function(){
 
     Path.map("#/results").to(function() {
         $.when(
-            self.pullRecipes()
-        ).then(function(data) {
+            self.pullRecipes(self.createParametersObject),
+            self.loadTemplate('recipes')
+        ).then(function(data, recipeHtml) {
             // debugger;
-            console.log(data);
+            // console.log(data),
+            self.putRecipeOnPage(data, recipeHtml);
         });
     });
 
@@ -120,4 +110,39 @@ LeftOver.prototype.Routing = function(){
     Path.listen();
 };
 
+
+
+
+
+
+
+
+
+// scrap notes
+    // this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
+
+
+
+
+
+
+    // Turning our completed form into a JSON object that we can pass to the pullRecipes function.
+    // var form = document.querySelector("form");
+
+    // function ConvertFormToJSON(form){
+    //     var array = form.serializeArray();
+    //     var json = {};
+
+    //     jQuery.each(array, function() {
+    //         json[this.name] = this.value || ''; 
+    //     });
+    // }
+
+    // var parameters = 
+
+    // {
+    //     protein = value from form,
+    //     vegetable = value from form,
+    //     carb = value from form
+    // }
 
