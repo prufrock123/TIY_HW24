@@ -26,6 +26,8 @@ function app(){
 
 }
 
+
+
 // http://api.yummly.com/v1/api/recipes?_app_id=app-id
 // &_app_key=app-key&your _search_parameters
 
@@ -57,6 +59,14 @@ LeftOver.prototype.pullRecipes = function(parameters) {
         return data;
     });
 };
+
+
+// this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
+// var parameters = {
+//     protein = value from form,
+//     vegetable = value from form,
+//     carb = value from form
+// }
 
 LeftOver.prototype.Routing = function(){
     "use strict";
