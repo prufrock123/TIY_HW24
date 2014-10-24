@@ -37,9 +37,10 @@ function LeftOver(options) {
         throw new Error("Not going to work w/o API key brah");
     }
     this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
+    this.ingredient = "&allowedIngredient[]="
     this.app_id = options.app_id;    
     this.app_key = options.app_key;
-    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key + "&";
+    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key + "&q=onion+soup";
 
     console.log(this.complete_api_url);
     this.Routing();
@@ -52,8 +53,20 @@ function joyRide(){
 
 LeftOver.prototype.pullRecipes = function(parameters) {
     "use strict";
+
+    var parameters = {};
+    $('form [name]').each(function(){
+    parameters[this.name] = this.value;
+    });
+
+    // console.dir(parameters);
+    // debugger;
+
     return $.getJSON(
-        this.complete_api_url + "&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
+        this.complete_api_url + this.ingredient + parameters.protein + this.ingredient + parameters.vegetable + this.ingredient + parameters.carb)  
+        // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
+        // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
+        // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
     .then(function(data){
         // console.log(data);
         return data;
@@ -62,7 +75,27 @@ LeftOver.prototype.pullRecipes = function(parameters) {
 
 
 // this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
-// var parameters = {
+
+
+
+
+
+
+// Turning our completed form into a JSON object that we can pass to the pullRecipes function.
+// var form = document.querySelector("form");
+
+// function ConvertFormToJSON(form){
+//     var array = form.serializeArray();
+//     var json = {};
+
+//     jQuery.each(array, function() {
+//         json[this.name] = this.value || ''; 
+//     });
+// }
+
+// var parameters = 
+
+// {
 //     protein = value from form,
 //     vegetable = value from form,
 //     carb = value from form
