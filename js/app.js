@@ -58,7 +58,7 @@ leftOver.prototype.pullRecipes = function(parameters) {
 leftOver.prototype.Routing = function(){
     var self = this;
 
-    Path.map("#/").to(joyRide());
+    Path.map("#/").to(joyRide);
 
     Path.map("#/results").to(function() {
         $.when(
@@ -69,7 +69,7 @@ leftOver.prototype.Routing = function(){
         });
     });
 
-    // Path.root("#/");
+    Path.root("#/");
     Path.listen();
 }
 
