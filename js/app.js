@@ -54,12 +54,14 @@ LeftOver.prototype.createParametersObject = function() {
     $('form [name]').each(function(){
     parameters[this.name] = this.value;
     });
+    return parameters;
 };
 
-LeftOver.prototype.pullRecipes = function(callback) {
+LeftOver.prototype.pullRecipes = function() {
     "use strict";
 
-    callback();
+    // callback();
+    var parameters = this.createParametersObject();
 
     // console.dir(parameters);
     // debugger;
@@ -81,8 +83,9 @@ LeftOver.prototype.loadTemplate = function(template) {
     });
 };
 
-LeftOver.prototype.putRecipeOnPage = function(html, data) {
+LeftOver.prototype.putRecipeOnPage = function(data, html) {
     // debugger;
+    console.log(data);
     document.querySelector('#recipes').innerHTML = 
     data.map(function(element) {
         return _.template(html, element);
@@ -97,7 +100,7 @@ LeftOver.prototype.Routing = function(){
 
     Path.map("#/results").to(function() {
         $.when(
-            self.pullRecipes(self.createParametersObject),
+            self.pullRecipes(),
             self.loadTemplate('recipes')
         ).then(function(data, recipeHtml) {
             // debugger;
