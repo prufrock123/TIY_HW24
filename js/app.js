@@ -12,36 +12,65 @@ function app(){
         {url: "./bower_components/foundation/js/foundation.js"}
     ).then(function(){
         _.templateSettings.interpolate = /{([\s\S]+?)}/g;
-        $(document).foundation('joyride', 'start');
+
         // start app?
-        
-    // var recipe = new leftOver(options);
+    var options = {
+        app_key: "4164fad3825e0f682dfe82b17b4acf89",
+        app_id: "2e7123cd"
+    }
+
+    var recipe = new leftOver(options);
 
     })
 
 }
 
-// function leftOver(options) {
-//     if (!options.api_key) {
-//         throw new Error("Not going to work w/o API key brah");
-//     };
-// }
+// http://api.yummly.com/v1/api/recipes?_app_id=app-id
+// &_app_key=app-key&your _search_parameters
 
+function leftOver(options) {
+    if (!options.app_key) {
+        throw new Error("Not going to work w/o API key brah");
+    };
+    this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
+    this.app_id = options.app_id;    
+    this.app_key = options.app_key;
+    this.complete_api_url = this.yum_url + this.app_id 
+        + "&_app_key=" + this.app_key + "&";
 
+    console.log(this.complete_api_url);
+    this.Routing();
+}
 
-// leftOver.prototype.Routing = function(){
-//     var self = this;
+function joyRide(){ 
+    $(document).foundation('joyride', 'start');
+}
 
-//     Path.map("#/").to(
-//     });
+leftOver.prototype.pullRecipes = function(parameters) {
+    return $.getJSON(
+        this.complete_api_url + "&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
+    .then(function(data){
+        // console.log(data);
+        return data;
+    });
+}
 
-//     Path.map("#/results").to(function() {
-//         $.when(
+leftOver.prototype.Routing = function(){
+    var self = this;
 
-//         ).then(function () {
+    Path.map("#/").to(joyRide());
 
-//         });
-//     });
-// }
+    Path.map("#/results").to(function() {
+        $.when(
+            self.pullRecipes()
+        ).then(function(data) {
+            // debugger;
+            console.log(data)
+        });
+    });
+
+    // Path.root("#/");
+    Path.listen();
+}
 
 
