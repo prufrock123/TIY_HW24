@@ -50,7 +50,7 @@ leftOver.prototype.pullRecipes = function(){
 
     //console.log(input);
 
-    return $.getJSON(this.completeURL + this.ingredient + input.Protein + this.ingredient + input.Vegetables + this.ingredient + input.Carbs + this.course + input.breakfast).then(function(data){
+    return $.getJSON(this.completeURL + this.ingredient + input.Protein + this.ingredient + input.Vegetables + this.ingredient + input.Carbs + this.course + input[3]).then(function(data){
         
         console.log(data);
 
@@ -67,7 +67,7 @@ leftOver.prototype.createInputObject = function(){
 //    var array = $("form [name]").serializeArray();
     var input = {};
 
-    $("form [name]").each(function(){
+    $(":input").each(function(){
         input[this.name] = this.value;
     }); //&& ($("option [value]").each(function(){
        // input[this.name] = this.value;
