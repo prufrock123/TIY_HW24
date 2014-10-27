@@ -110,7 +110,7 @@ function LeftOver(options) {
             $.when(
                 self.pullRecipes(),
                 self.loadTemplate('recipes')
-            ).then(function(data, recipeHtml) {
+            ).then(function(data, recipeHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(data),
                 self.putRecipeOnPage(data, recipeHtml);
