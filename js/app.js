@@ -54,11 +54,12 @@ function LeftOver(yum_options, oven_options) {
     this.yum_complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
 
     
-    this.oven_url = "http://api.bigoven.com/recipe/";
+    this.oven_url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=";
     this.api_key = oven_options.api_key;
 
 
     console.log(this.yum_complete_api_url);
+    console.log(this.oven_url);
     this.Routing();
 }
 
@@ -89,23 +90,35 @@ function LeftOver(yum_options, oven_options) {
 
         return $.getJSON(
             this.yum_complete_api_url + this.yum_ingredient + input.protein + this.yum_ingredient + input.vegetable + this.yum_ingredient + input.carb + this.yum_course + input.course)  
-            // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
-            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
-            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
         .then(function(data){
             console.log(data);
             return data.matches;
         });
     
-        return $.getJSON(
-            this.oven_url)
-
-
-
     };
 
-    LeftOver.prototype.loadTemplate = function(template) {
-        return $.get('./templates/' + template + '.html').then(function(htmlString){
+    LeftOver.prototype.pullOvenRecipes = function(){
+        "use strict";
+
+        var input = this.createInputObject();
+
+        return $.getJSON(
+            this.oven_url + input.protein + "&api_key=" + this.api_key)
+        .then(function(data){
+            console.log(data.Results);
+            return data.Results;
+        });
+    };
+
+
+    LeftOver.prototype.loadTemplate = function(yum_template) {
+        return $.get('./templates/' + yum_template + '.html').then(function(htmlString){
+            return htmlString;
+        });
+    };
+
+    LeftOver.prototype.loadOvenTemplate = function(oven_template){
+        return $.get('./templates/' + oven_template + '.html').then(function(htmlString){
             return htmlString;
         });
     };
@@ -115,7 +128,7 @@ function LeftOver(yum_options, oven_options) {
         console.log(data);
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
-            console.log(element.imageUrlsBySize)
+//            console.log(element.imageUrlsBySize)
             return _.template(html, element);
         }).join("");
     };
@@ -129,7 +142,9 @@ function LeftOver(yum_options, oven_options) {
         Path.map("#/results").to(function() {
             $.when(
                 self.pullRecipes(),
-                self.loadTemplate('recipes')
+                self.pullOvenRecipes(),
+                self.loadTemplate('recipes'),
+                self.loadOvenTemplate('ovenrecipes')
             ).then(function(data, recipeHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(data),
