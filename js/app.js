@@ -117,6 +117,17 @@ function LeftOver(options) {
             });
         });
 
+        $("#refresh").click(function() {
+            $.when(
+                self.pullRecipes(),
+                self.loadTemplate('recipes')
+            ).then(function(data, recipeHtml) {
+                // debugger;
+                // console.log(data),
+                self.putRecipeOnPage(data, recipeHtml);
+            });
+        });        
+
         Path.root("#/");
         Path.listen();
     };
