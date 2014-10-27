@@ -61,7 +61,7 @@ function LeftOver(options) {
         input[this.name] = this.value;
         });
 
-        console.log(input);
+        console.dir(input);
         return input;
     };
 
@@ -75,7 +75,7 @@ function LeftOver(options) {
         // debugger;
 
         return $.getJSON(
-            this.complete_api_url + this.ingredient + input.protein + this.ingredient + input.vegetable + this.ingredient + input.carb + this.course + input[3])  
+            this.complete_api_url + this.ingredient + input.protein + this.ingredient + input.vegetable + this.ingredient + input.carb + this.course + input.course)  
             // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
             // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
             // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
