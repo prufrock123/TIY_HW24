@@ -92,10 +92,12 @@ function LeftOver(options) {
 
     LeftOver.prototype.putRecipeOnPage = function(data, html) {
         // debugger;
+        flavor = [];
         console.log(data);
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
             console.log(element.imageUrlsBySize)
+            flavor.push(element.flavors);
             return _.template(html, element);
         }).join("");
     };
@@ -114,6 +116,7 @@ function LeftOver(options) {
                 // debugger;
                 // console.log(data),
                 self.putRecipeOnPage(data, recipeHtml);
+                console.log(flavor);
             });
         });
 
@@ -125,6 +128,7 @@ function LeftOver(options) {
                 // debugger;
                 // console.log(data),
                 self.putRecipeOnPage(data, recipeHtml);
+                console.log(flavor);
             });
         });        
 
