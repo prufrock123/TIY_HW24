@@ -80,7 +80,7 @@ function LeftOver(options) {
             // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
             // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
         .then(function(data){
-            // console.log(data);
+            console.log(data);
             return data.matches;
         });
     };
@@ -96,6 +96,7 @@ function LeftOver(options) {
         console.log(data);
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
+            console.log(element.imageUrlsBySize)
             return _.template(html, element);
         }).join("");
     };
@@ -116,6 +117,17 @@ function LeftOver(options) {
                 self.putRecipeOnPage(data, recipeHtml);
             });
         });
+
+        $("#refresh").click(function() {
+            $.when(
+                self.pullRecipes(),
+                self.loadTemplate('recipes')
+            ).then(function(data, recipeHtml) {
+                // debugger;
+                // console.log(data),
+                self.putRecipeOnPage(data, recipeHtml);
+            });
+        });        
 
         Path.root("#/");
         Path.listen();
