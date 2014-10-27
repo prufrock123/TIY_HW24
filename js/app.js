@@ -34,6 +34,7 @@ function leftOver(options) {
 
      this.yummly_url = "http://api.yummly.com/v1/api/recipes?_app_id=";                 //"this." whatever is all one cookie
      this.ingredient = "&allowedIngredient[]=";
+     this.course = "&allowedCourse[]=course^course-";
      this.appkey = options.appkey;
      this.idkey = options.idkey;
      this.completeURL = this.yummly_url + this.idkey + "&_app_key=" + this.appkey;
@@ -47,11 +48,13 @@ leftOver.prototype.pullRecipes = function(){
 
     var input = this.createInputObject();
 
-    return $.getJSON(this.completeURL + this.ingredient + input[0] + this.ingredient + input[1] + this.ingredient + input[2]).then(function(data){
-        
-        console.log(data);
+    //console.log(input);
 
-        return data;
+    return $.getJSON(this.completeURL + this.ingredient + input.Protein + this.ingredient + input.Vegetables + this.ingredient + input.Carbs + this.course + input.name).then(function(data){
+        
+        console.log(data.matches);
+
+        return data.matches;
 
     });
 };
@@ -61,14 +64,14 @@ leftOver.prototype.pullRecipes = function(){
 //this needs to take the info from the form and create an object that has 3 properties and values (protein=form1, veg=form2, carb=form3)
 leftOver.prototype.createInputObject = function(){
     
-    var array = $("form [name]").serializeArray();
+//    var array = $("form [name]").serializeArray();
     var input = {};
 
-    $.each(array, function(){
+    $("form [name]").each(function(){
         input[this.name] = this.value;
     });
 
-    console.dir(input);
+    console.log(input);
 
     return input;
 };
@@ -79,11 +82,11 @@ leftOver.prototype.loadTemplate = function(name){
     });
 };
 
-leftOver.prototype.putRecipesOnPage = function(templateString, data){
+leftOver.prototype.putRecipesOnPage = function(templateString, data){   //i had data first, and it was console logging the templateString stuff, not the array. WHY WHY WHY
     
-    console.log(templateString);
-    
-    document.querySelector('#recipearea').innerHTML = data.results.map(function(x){
+    console.log(data);
+
+    document.querySelector('#recipearea').innerHTML = data.map(function(x){
         return _.template(templateString, x);
     }).join("");
 };
@@ -104,8 +107,8 @@ leftOver.prototype.setupRouting = function(){
         $.when(
             self.loadTemplate('recipes'),
             self.pullRecipes()
-            ).then(function(data, recipeHtml){
-                self.putRecipesOnPage(data, recipeHtml);
+            ).then(function(){
+                self.putRecipesOnPage(arguments[0], arguments[1]);
             });
     });
 
