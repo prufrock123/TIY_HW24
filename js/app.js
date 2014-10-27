@@ -1,6 +1,9 @@
 
 window.onload = app;
 
+// Global variable
+    flavor = [];
+
 // runs when the DOM is loaded
 function app(){
     "use strict";
@@ -92,7 +95,6 @@ function LeftOver(options) {
 
     LeftOver.prototype.putRecipeOnPage = function(data, html) {
         // debugger;
-        flavor = [];
         console.log(data);
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
