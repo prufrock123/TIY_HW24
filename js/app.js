@@ -34,101 +34,94 @@ function LeftOver(options) {
     if (!options.app_key) {
         throw new Error("Not going to work w/o API key brah");
     }
+    if(!options.app_id) {
+        throw new Error("Not going to work w/o ID key either");
+     }
     this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
     this.ingredient = "&allowedIngredient[]=";
+    this.course = "&allowedCourse[]=course^course-";
     this.app_id = options.app_id;    
     this.app_key = options.app_key;
-    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key + "&q=onion+soup";
+    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
 
     console.log(this.complete_api_url);
     this.Routing();
 }
 
-function joyRide(){ 
-    "use strict";
-    $(document).foundation('joyride', 'start');
-}
 
-LeftOver.prototype.createParametersObject = function() {
-    var parameters = {};
-    $('form [name]').each(function(){
-    parameters[this.name] = this.value;
-    });
-    return parameters;
-};
+// function joyRide(){ 
+//     "use strict";
+//     $(document).foundation('joyride', 'start');
+// }
 
-LeftOver.prototype.pullRecipes = function() {
-    "use strict";
-
-    // callback();
-    var parameters = this.createParametersObject();
-
-    // console.dir(parameters);
-    // debugger;
-
-    return $.getJSON(
-        this.complete_api_url + this.ingredient + parameters.protein + this.ingredient + parameters.vegetable + this.ingredient + parameters.carb)  
-        // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
-        // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
-        // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
-    .then(function(data){
-        // console.log(data);
-        return data.matches;
-    });
-};
-
-LeftOver.prototype.loadTemplate = function(template) {
-    return $.get('./templates/' + template + '.html').then(function(htmlString){
-        return htmlString;
-    });
-};
-
-LeftOver.prototype.putRecipeOnPage = function(data, html) {
-    // debugger;
-    console.log(data);
-    document.querySelector('#recipes').innerHTML = 
-    data.map(function(element) {
-        return _.template(html, element);
-    }).join("");
-};
-
-LeftOver.prototype.Routing = function(){
-    "use strict";
-    var self = this;
-
-    Path.map("#/").to(joyRide);
-
-    Path.map("#/results").to(function() {
-        $.when(
-            self.pullRecipes(),
-            self.loadTemplate('recipes')
-        ).then(function(data, recipeHtml) {
-            // debugger;
-            // console.log(data),
-            self.putRecipeOnPage(data, recipeHtml);
+    LeftOver.prototype.createInputObject = function() {
+        var input = {};
+        $(':input').each(function(){
+        input[this.name] = this.value;
         });
-    });
 
-    Path.root("#/");
-    Path.listen();
-};
+        console.log(input);
+        return input;
+    };
 
+    LeftOver.prototype.pullRecipes = function() {
+        "use strict";
 
+        // callback();
+        var input = this.createInputObject();
 
+        // console.dir(parameters);
+        // debugger;
 
+        return $.getJSON(
+            this.complete_api_url + this.ingredient + input.protein + this.ingredient + input.vegetable + this.ingredient + input.carb + this.course + input[3])  
+            // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
+            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
+            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
+        .then(function(data){
+            // console.log(data);
+            return data.matches;
+        });
+    };
 
+    LeftOver.prototype.loadTemplate = function(template) {
+        return $.get('./templates/' + template + '.html').then(function(htmlString){
+            return htmlString;
+        });
+    };
 
+    LeftOver.prototype.putRecipeOnPage = function(data, html) {
+        // debugger;
+        console.log(data);
+        document.querySelector('#recipes').innerHTML = 
+        data.map(function(element) {
+            return _.template(html, element);
+        }).join("");
+    };
 
+    LeftOver.prototype.Routing = function(){
+        "use strict";
+        var self = this;
 
+        // Path.map("#/").to(joyRide);
+
+        Path.map("#/results").to(function() {
+            $.when(
+                self.pullRecipes(),
+                self.loadTemplate('recipes')
+            ).then(function(data, recipeHtml) {
+                // debugger;
+                // console.log(data),
+                self.putRecipeOnPage(data, recipeHtml);
+            });
+        });
+
+        Path.root("#/");
+        Path.listen();
+    };
 
 // scrap notes
     // this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
-
-
-
-
-
-
     // Turning our completed form into a JSON object that we can pass to the pullRecipes function.
     // var form = document.querySelector("form");
 
@@ -142,6 +135,7 @@ LeftOver.prototype.Routing = function(){
     // }
 
     // var parameters = 
+
 
     // {
     //     protein = value from form,
