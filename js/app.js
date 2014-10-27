@@ -3,6 +3,7 @@ window.onload = app;
 
 // runs when the DOM is loaded
 function app(){
+    "use strict";
 
     // load some scripts (uses promises :D)
     loader.load(
@@ -12,115 +13,134 @@ function app(){
         {url: "./bower_components/foundation/js/foundation.js"}
     ).then(function(){
         _.templateSettings.interpolate = /{([\s\S]+?)}/g;
-        //$(document).foundation('joyride', 'start');
+
         // start app?
-    
-    var options = {appkey: "14769cacd9015eac3cd104f98cebcbee", idkey: "95b64149"};
-    
-    var recipe = new leftOver(options); //make a cookie called recipe using cookie-cutter called leftOver
+    var options = {
+        app_key: "4164fad3825e0f682dfe82b17b4acf89",
+        app_id: "2e7123cd"
+    };
+
+    var recipe = new LeftOver(options);
 
     });
 
 }
 
-function leftOver(options) {
-     if (!options.appkey) {
-         throw new Error("Not going to work w/o APP key brah");
-     }
+// http://api.yummly.com/v1/api/recipes?_app_id=app-id
+// &_app_key=app-key&your _search_parameters
 
-     if(!options.idkey) {
+function LeftOver(options) {
+    "use strict";
+    if (!options.app_key) {
+        throw new Error("Not going to work w/o API key brah");
+    }
+    if(!options.app_id) {
         throw new Error("Not going to work w/o ID key either");
      }
 
-     this.yummly_url = "http://api.yummly.com/v1/api/recipes?_app_id=";                 //"this." whatever is all one cookie
-     this.ingredient = "&allowedIngredient[]=";
-     this.course = "&allowedCourse[]=course^course-";
-     this.appkey = options.appkey;
-     this.idkey = options.idkey;
-     this.completeURL = this.yummly_url + this.idkey + "&_app_key=" + this.appkey;
-     
-     console.log(this.completeURL);
+    this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
+    this.ingredient = "&allowedIngredient[]=";
+    this.course = "&allowedCourse[]=course^course-";
+    this.app_id = options.app_id;    
+    this.app_key = options.app_key;
+    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
 
-     this.setupRouting();
- }
-
-leftOver.prototype.pullRecipes = function(){
-
-    var input = this.createInputObject();
-
-    //console.log(input);
-
-    return $.getJSON(this.completeURL + this.ingredient + input.Protein + this.ingredient + input.Vegetables + this.ingredient + input.Carbs + this.Course + input[3]).then(function(data){
-        
-        console.log(data);
-
-        return data.matches;
-
-    });
-};
+    console.log(this.complete_api_url);
+    this.Routing();
+}
 
 
-//var input =  
-//this needs to take the info from the form and create an object that has 3 properties and values (protein=form1, veg=form2, carb=form3)
-leftOver.prototype.createInputObject = function(){
-    
-//    var array = $("form [name]").serializeArray();
-    var input = {};
+// function joyRide(){ 
+//     "use strict";
+//     $(document).foundation('joyride', 'start');
+// }
 
-    $(":input").each(function(){
+    LeftOver.prototype.createInputObject = function() {
+        var input = {};
+        $(':input').each(function(){
         input[this.name] = this.value;
-    }); //&& ($(":input").each(function(){
-       // input[this.name] = this.value;
-       //}));
+        });
 
-    console.log(input);
+        console.log(input);
+        return input;
+    };
 
-    return input;
+    LeftOver.prototype.pullRecipes = function() {
+        "use strict";
 
+        // callback();
+        var input = this.createInputObject();
 
-};
+        // console.dir(parameters);
+        // debugger;
 
-leftOver.prototype.loadTemplate = function(name){
-    return $.get("./templates/" + name + ".html").then(function(htmlString){
-        return htmlString;
-    });
-};
+        return $.getJSON(
+            this.complete_api_url + this.ingredient + input.protein + this.ingredient + input.vegetable + this.ingredient + input.carb + this.course + input[3])  
+            // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
+            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
+            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
+        .then(function(data){
+            // console.log(data);
+            return data.matches;
+        });
+    };
 
-leftOver.prototype.putRecipesOnPage = function(templateString, data){   //i had data first, and it was console logging the templateString stuff, not the array. WHY WHY WHY
-    
-    console.log(data);
+    LeftOver.prototype.loadTemplate = function(template) {
+        return $.get('./templates/' + template + '.html').then(function(htmlString){
+            return htmlString;
+        });
+    };
 
-    document.querySelector('#recipearea').innerHTML = data.map(function(x){
-        return _.template(templateString, x);
-    }).join("");
-};
+    LeftOver.prototype.putRecipeOnPage = function(data, html) {
+        // debugger;
+        console.log(data);
+        document.querySelector('#recipes').innerHTML = 
+        data.map(function(element) {
+            return _.template(html, element);
+        }).join("");
+    };
 
-leftOver.prototype.setupRouting = function(){
+    LeftOver.prototype.Routing = function(){
+        "use strict";
+        var self = this;
 
-    var self = this;
+        // Path.map("#/").to(joyRide);
 
-    // Path.map("#/").to(function(){
-    //     $.when(self.pullRecipes()
-    //         ).then(function(self){
-    //             console.log(self);
-    //         });
-    // });
-
-
-    Path.map("#/results").to(function(){
-        $.when(
-            self.loadTemplate('recipes'),
-            self.pullRecipes()
-            ).then(function(){
-                self.putRecipesOnPage(arguments[0], arguments[1]);
+        Path.map("#/results").to(function() {
+            $.when(
+                self.pullRecipes(),
+                self.loadTemplate('recipes')
+            ).then(function(data, recipeHtml) {
+                // debugger;
+                // console.log(data),
+                self.putRecipeOnPage(data, recipeHtml);
             });
-    });
+        });
+
+        Path.root("#/");
+        Path.listen();
+    };
+
+// scrap notes
+    // this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
+    // Turning our completed form into a JSON object that we can pass to the pullRecipes function.
+    // var form = document.querySelector("form");
+
+    // function ConvertFormToJSON(form){
+    //     var array = form.serializeArray();
+    //     var json = {};
+
+    //     jQuery.each(array, function() {
+    //         json[this.name] = this.value || ''; 
+    //     });
+    // }
+
+    // var parameters = 
 
 
-Path.root("#/");
-Path.listen();
+    // {
+    //     protein = value from form,
+    //     vegetable = value from form,
+    //     carb = value from form
+    // }
 
-};
-
-
-//laksdals;kds
