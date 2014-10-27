@@ -164,11 +164,11 @@ function LeftOver(yum_options, oven_options) {
                 self.loadTemplate('ovenrecipes')
             ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
-                console.log(flavor);
                 // console.log(yumdata)
                 // console.log(ovendata)
                 self.putRecipeOnPage(yumdata, recipeHtml);
                 self.putOvenRecipeOnPage(ovendata, ovenHtml);
+                console.log(flavor);
 
             });
         });
@@ -180,9 +180,9 @@ function LeftOver(yum_options, oven_options) {
                 self.loadTemplate('recipes'),
                 self.loadTemplate('ovenrecipes')
             ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {
+                self.putRecipeOnPage(yumdata, recipeHtml);
+                self.putOvenRecipeOnPage(ovendata, ovenHtml);
                 console.log(flavor);
-                self.putRecipeOnPage(yumdata, recipeHtml)
-                self.putOvenRecipeOnPage(ovendata, ovenHtml)
 
             });
         });        
