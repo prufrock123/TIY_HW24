@@ -133,6 +133,18 @@ function LeftOver(yum_options, oven_options) {
         }).join("");
     };
 
+LeftOver.prototype.putOvenRecipeOnPage = function(data, html) {
+        // debugger;
+        console.log(data);
+        document.querySelector('#recipes').innerHTML = 
+        data.map(function(element) {
+//            console.log(element.imageUrlsBySize)
+            return _.template(html, element);
+        }).join("");
+    };
+
+
+
     LeftOver.prototype.Routing = function(){
         "use strict";
         var self = this;
@@ -145,10 +157,11 @@ function LeftOver(yum_options, oven_options) {
                 self.pullOvenRecipes(),
                 self.loadTemplate('recipes'),
                 self.loadOvenTemplate('ovenrecipes')
-            ).then(function(data, recipeHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
+            ).then(function(data, recipeHtml, data2, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(data),
-                self.putRecipeOnPage(data, recipeHtml);
+                self.putRecipeOnPage(data, recipeHtml),
+                self.putOvenRecipeOnPage(data2, ovenHtml);
             });
         });
 
@@ -156,10 +169,11 @@ function LeftOver(yum_options, oven_options) {
             $.when(
                 self.pullRecipes(),
                 self.loadTemplate('recipes')
-            ).then(function(data, recipeHtml) {
+            ).then(function(data, recipeHtml, data2, ovenHtml) {
                 // debugger;
                 // console.log(data),
-                self.putRecipeOnPage(data, recipeHtml);
+                self.putRecipeOnPage(data, recipeHtml),
+                self.putOvenRecipeOnPage(data2, ovenHtml);
             });
         });        
 
