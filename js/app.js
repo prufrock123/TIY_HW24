@@ -15,12 +15,16 @@ function app(){
         _.templateSettings.interpolate = /{([\s\S]+?)}/g;
 
         // start app?
-    var options = {
+    var yum_options = {
         app_key: "4164fad3825e0f682dfe82b17b4acf89",
         app_id: "2e7123cd"
     };
 
-    var recipe = new LeftOver(options);
+    var oven_options = {
+        api_key: "dvxVx0d11bD2O2D8z4L627I15fZu05Em"
+    };
+
+    var recipe = new LeftOver(yum_options, oven_options);
 
     });
 
@@ -29,22 +33,33 @@ function app(){
 // http://api.yummly.com/v1/api/recipes?_app_id=app-id
 // &_app_key=app-key&your _search_parameters
 
-function LeftOver(options) {
+function LeftOver(yum_options, oven_options) {
     "use strict";
-    if (!options.app_key) {
-        throw new Error("Not going to work w/o API key brah");
+    if (!yum_options.app_key) {
+        throw new Error("Not going to work w/o Yummly API key bruh");
     }
-    if(!options.app_id) {
-        throw new Error("Not going to work w/o ID key either");
+    if(!yum_options.app_id) {
+        throw new Error("Not going to work w/o Yummly ID key either");
      }
-    this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
-    this.ingredient = "&allowedIngredient[]=";
-    this.course = "&allowedCourse[]=course^course-";
-    this.app_id = options.app_id;    
-    this.app_key = options.app_key;
-    this.complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
 
-    console.log(this.complete_api_url);
+    if(!oven_options.api_key) {
+        throw new Error("Need your BigOven key too fool");
+    }
+
+    this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
+    this.yum_ingredient = "&allowedIngredient[]=";
+    this.yum_course = "&allowedCourse[]=course^course-";
+    this.app_id = yum_options.app_id;    
+    this.app_key = yum_options.app_key;
+    this.yum_complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
+
+    
+    this.oven_url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=";
+    this.api_key = oven_options.api_key;
+
+
+    console.log(this.yum_complete_api_url);
+    console.log(this.oven_url);
     this.Routing();
 }
 
@@ -55,6 +70,7 @@ function LeftOver(options) {
 // }
 
     LeftOver.prototype.createInputObject = function() {
+        "use strict";
         var input = {};
         $(':input').each(function(){
         input[this.name] = this.value;
@@ -74,15 +90,27 @@ function LeftOver(options) {
         // debugger;
 
         return $.getJSON(
-            this.complete_api_url + this.ingredient + input.protein + this.ingredient + input.vegetable + this.ingredient + input.carb + this.course + input.course)  
-            // http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac
-            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=garlic&allowedIngredient[]=cognac")
-            // http://api.yummly.com/v1/api/recipes?_app_id2e7123cd&_app_key=4164fad3825e0f682dfe82b17b4acf89&q=onion+soup&allowedIngredient[]=beef&allowedIngredient[]=carrot&allowedIngredient[]=potato
+            this.yum_complete_api_url + this.yum_ingredient + input.protein + this.yum_ingredient + input.vegetable + this.yum_ingredient + input.carb + this.yum_course + input.course)  
         .then(function(data){
             console.log(data);
             return data.matches;
         });
+    
     };
+
+    LeftOver.prototype.pullOvenRecipes = function(){
+        "use strict";
+
+        var input = this.createInputObject();
+
+        return $.getJSON(
+            this.oven_url + input.protein + "&api_key=" + this.api_key)
+        .then(function(data){
+            console.log(data.Results);
+            return data.Results;
+        });
+    };
+
 
     LeftOver.prototype.loadTemplate = function(template) {
         return $.get('./templates/' + template + '.html').then(function(htmlString){
@@ -91,16 +119,36 @@ function LeftOver(options) {
     };
 
     LeftOver.prototype.putRecipeOnPage = function(data, html) {
+        "use strict";
         // debugger;
         flavor = [];
         console.log(data);
+        console.log(html);
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
-            console.log(element.imageUrlsBySize)
             flavor.push(element.flavors);
             return _.template(html, element);
         }).join("");
     };
+
+    LeftOver.prototype.putOvenRecipeOnPage = function(data, html) {
+        "use strict";
+        console.log(data);
+        console.log(html);
+        document.querySelector('#ovenrecipes').innerHTML = 
+        data.map(function(element) {
+//            console.log(element.imageUrlsBySize)
+              console.log(element);
+            // if(element.imageURL){
+            //     return _.template(html, element);   
+            // } else {
+            //     return;
+            // }
+            return _.template(html, element);
+        }).join("");
+    };
+
+
 
     LeftOver.prototype.Routing = function(){
         "use strict";
@@ -111,24 +159,31 @@ function LeftOver(options) {
         Path.map("#/results").to(function() {
             $.when(
                 self.pullRecipes(),
-                self.loadTemplate('recipes')
-            ).then(function(data, recipeHtml) {
+                self.pullOvenRecipes(),
+                self.loadTemplate('recipes'),
+                self.loadTemplate('ovenrecipes')
+            ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
-                // console.log(data),
-                self.putRecipeOnPage(data, recipeHtml);
                 console.log(flavor);
+                // console.log(yumdata)
+                // console.log(ovendata)
+                self.putRecipeOnPage(yumdata, recipeHtml);
+                self.putOvenRecipeOnPage(ovendata, ovenHtml);
+
             });
         });
 
         $("#refresh").click(function() {
             $.when(
                 self.pullRecipes(),
-                self.loadTemplate('recipes')
-            ).then(function(data, recipeHtml) {
-                // debugger;
-                // console.log(data),
-                self.putRecipeOnPage(data, recipeHtml);
+                self.pullOvenRecipes(),
+                self.loadTemplate('recipes'),
+                self.loadTemplate('ovenrecipes')
+            ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {
                 console.log(flavor);
+                self.putRecipeOnPage(yumdata, recipeHtml)
+                self.putOvenRecipeOnPage(ovendata, ovenHtml)
+
             });
         });        
 
@@ -159,3 +214,4 @@ function LeftOver(options) {
     //     carb = value from form
     // }
 
+//test
