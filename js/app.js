@@ -1,8 +1,37 @@
 
 window.onload = app;
 
-// Global variable
+// Global variables
     flavor = [];
+    styles = [];
+
+// Test code for getting all the stlyes from breweryDB:
+function getBeerStyles() {
+   // var Beers = []
+    return $.getJSON(
+        "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
+    .then(function(data, second, third){
+        // debugger;
+        // console.dir(data);
+        // console.dir(second);
+        // console.dir(third);
+        // console.dir(data.data);
+        var arrayOfStyles = data.data;
+        addBeersToStyles(arrayOfStyles);
+        // console.dir(arrayOfStyles);
+        // Beers.push(data.data);
+        // return data.data;
+        return arrayOfStyles;
+    });
+}
+
+function addBeersToStyles(array) {
+    console.dir(array);
+    styles.push(array[0]);
+    console.dir(styles);
+    return styles;
+}
+
 
 // runs when the DOM is loaded
 function app(){
@@ -60,7 +89,8 @@ function LeftOver(yum_options, oven_options) {
     this.oven_url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=";
     this.api_key = oven_options.api_key;
 
-
+    console.log(typeof this.yum_complete_api_url);
+    console.log("hfasdjf;alsdjf;aslkdjf;alsdfja;sldkjfi");
     console.log(this.yum_complete_api_url);
     console.log(this.oven_url);
     this.Routing();
@@ -156,6 +186,10 @@ function LeftOver(yum_options, oven_options) {
         "use strict";
         var self = this;
 
+        // debugger;
+        getBeerStyles();
+        
+        // addBeersToStyles(getBeerStyles());
         // Path.map("#/").to(joyRide);
 
         Path.map("#/results").to(function() {
@@ -164,12 +198,14 @@ function LeftOver(yum_options, oven_options) {
                 self.pullOvenRecipes(),
                 self.loadTemplate('recipes'),
                 self.loadTemplate('ovenrecipes')
+                // getBeerStyles()
             ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(yumdata)
                 // console.log(ovendata)
                 self.putRecipeOnPage(yumdata, recipeHtml);
                 self.putOvenRecipeOnPage(ovendata, ovenHtml);
+                // addBeersToStyles(beerArray);
                 console.log(flavor);
 
             });
