@@ -6,31 +6,32 @@ window.onload = app;
     styles = [];
 
 // Test code for getting all the stlyes from breweryDB:
-function getBeerStyles() {
-   // var Beers = []
-    return $.getJSON(
-        "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
-    .then(function(data, second, third){
-        // debugger;
-        // console.dir(data);
-        // console.dir(second);
-        // console.dir(third);
-        // console.dir(data.data);
-        var arrayOfStyles = data.data;
-        addBeersToStyles(arrayOfStyles);
-        // console.dir(arrayOfStyles);
-        // Beers.push(data.data);
-        // return data.data;
-        return arrayOfStyles;
-    });
-}
-
-function addBeersToStyles(array) {
-    console.dir(array);
-    styles.push(array[0]);
-    console.dir(styles);
-    return styles;
-}
+//  
+    // function getBeerStyles() {
+    //    // var Beers = []
+    //     return $.getJSON(
+    //         "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
+    //     .then(function(data, second, third){
+    //         // debugger;
+    //         // console.dir(data);
+    //         // console.dir(second);
+    //         // console.dir(third);
+    //         // console.dir(data.data);
+    //         var arrayOfStyles = data.data;
+    //         addBeersToStyles(arrayOfStyles);
+    //         // console.dir(arrayOfStyles);
+    //         // Beers.push(data.data);
+    //         // return data.data;
+    //         return arrayOfStyles;
+    //     });
+    // }
+//
+    function addBeersToStyles(array) {
+        console.dir(array);
+        styles.push(array[29], array[89], array[97], array[34]);
+        console.dir(styles);
+        return styles;
+    }
 
 
 // runs when the DOM is loaded
@@ -89,8 +90,7 @@ function LeftOver(yum_options, oven_options) {
     this.oven_url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=";
     this.api_key = oven_options.api_key;
 
-    console.log(typeof this.yum_complete_api_url);
-    console.log("hfasdjf;alsdjf;aslkdjf;alsdfja;sldkjfi");
+    // console.log(typeof this.yum_complete_api_url);
     console.log(this.yum_complete_api_url);
     console.log(this.oven_url);
     this.Routing();
@@ -128,7 +128,6 @@ function LeftOver(yum_options, oven_options) {
             console.log(data);
             return data.matches;
         });
-    
     };
 
     LeftOver.prototype.pullOvenRecipes = function(){
@@ -144,7 +143,6 @@ function LeftOver(yum_options, oven_options) {
         });
     };
 
-
     LeftOver.prototype.loadTemplate = function(template) {
         return $.get('./templates/' + template + '.html').then(function(htmlString){
             return htmlString;
@@ -159,7 +157,7 @@ function LeftOver(yum_options, oven_options) {
         document.querySelector('#recipes').innerHTML = 
         data.map(function(element) {
             flavor.push(element.flavors);
-            return _.template(html, element);
+            return _.template(html, $.extend({}, element, styles[0]));
         }).join("");
     };
 
@@ -180,6 +178,32 @@ function LeftOver(yum_options, oven_options) {
         }).join("");
     };
 
+    LeftOver.prototype.getBeerStyles = function() {
+       // var Beers = []
+        return $.getJSON(
+            "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
+        .then(function(data, second, third){
+            // debugger;
+            // console.dir(data);
+            // console.dir(second);
+            // console.dir(third);
+            // console.dir(data.data);
+            var arrayOfStyles = data.data;
+            addBeersToStyles(arrayOfStyles);
+            // console.dir(arrayOfStyles);
+            // Beers.push(data.data);
+            // return data.data;
+            return arrayOfStyles;
+        });
+    }
+
+    // LeftOver.prototype.addBeersToStyles = function(array) {
+    //     console.dir(array);
+    //     styles.push(array[29], array[89], array[97], array[34]);
+    //     console.dir(styles);
+    //     return styles;
+    // }
+
 
 
     LeftOver.prototype.Routing = function(){
@@ -187,7 +211,7 @@ function LeftOver(yum_options, oven_options) {
         var self = this;
 
         // debugger;
-        getBeerStyles();
+        // getBeerStyles();
         
         // addBeersToStyles(getBeerStyles());
         // Path.map("#/").to(joyRide);
@@ -197,8 +221,8 @@ function LeftOver(yum_options, oven_options) {
                 self.pullRecipes(),
                 self.pullOvenRecipes(),
                 self.loadTemplate('recipes'),
-                self.loadTemplate('ovenrecipes')
-                // getBeerStyles()
+                self.loadTemplate('ovenrecipes'),
+                self.getBeerStyles()
             ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(yumdata)
