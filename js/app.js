@@ -26,12 +26,26 @@ window.onload = app;
     //     });
     // }
 //
-    function addBeersToStyles(array) {
-        console.dir(array);
-        styles.push(array[29], array[89], array[97], array[34]);
-        console.dir(styles);
-        return styles;
+
+// 2 new beer functions
+function addBeersToStyles(array) {
+    // console.dir(array);
+    styles.push(array[29], array[89], array[97], array[34], {name: "Sorry, there are no beer pairings for this recipe"});
+    console.dir(styles);
+    return styles;
+}
+
+function beerPairer(i){
+    if (!flavor[i]){
+        return styles[4];
+    } else if (flavor[i].bitter > .15 && flavor[i].sweet > .5){
+        return styles[0];
+    } else if (flavor[i].sweet > .15){
+        return styles[1];
+    } else {
+        return styles[3];
     }
+};
 
 
 // runs when the DOM is loaded
@@ -155,11 +169,25 @@ function LeftOver(yum_options, oven_options) {
         console.log(data);
         console.log(html);
         document.querySelector('#recipes').innerHTML = 
-        data.map(function(element) {
+        data.map(function(element, index) {
             flavor.push(element.flavors);
-            return _.template(html, $.extend({}, element, styles[0]));
+            // console.dir($.extend({}, element, beerPairer(index)));
+            return _.template(html, $.extend({}, element, beerPairer(index)));
         }).join("");
     };
+
+    // What I want is something like:
+    // return _.template(html, $.extend({}, element, if (flavors[i].bitter > 0.15) then styles[0]));
+    // 
+    // So I will create a function beerPairer
+    // 
+    // function beerPairer(i){
+    // if (flavors[i].bitter > .15){
+    //          return styles[0];
+    //      } else if (flavors[i].sweet > .15){
+    //          return styles[1]
+    //      }
+    // }
 
     LeftOver.prototype.putOvenRecipeOnPage = function(data, html) {
         "use strict";
@@ -240,7 +268,8 @@ function LeftOver(yum_options, oven_options) {
                 self.pullRecipes(),
                 self.pullOvenRecipes(),
                 self.loadTemplate('recipes'),
-                self.loadTemplate('ovenrecipes')
+                self.loadTemplate('ovenrecipes'),
+                self.getBeerStyles()
             ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {
                 self.putRecipeOnPage(yumdata, recipeHtml);
                 self.putOvenRecipeOnPage(ovendata, ovenHtml);
