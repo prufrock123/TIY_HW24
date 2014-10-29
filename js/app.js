@@ -5,6 +5,51 @@ window.onload = app;
     flavor = [];
     styles = [];
 
+
+// Test code for localStorage
+
+    // localStorage.setItem("visits", getMeNumber)
+
+    function counter() {
+        // debugger;
+        var getMeNumber = localStorage.getItem("visits");
+        if (getMeNumber == null || isNaN(getMeNumber)) {
+            getMeNumber = 0;
+        } else {
+            getMeNumber = parseInt(getMeNumber);
+        }
+        getMeNumber++;
+        localStorage.setItem("visits", getMeNumber.toString())
+        document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
+    }
+
+    counter();
+
+    // function counter() {
+    //     var getMeNumber = localStorage.getItem("visits");
+    //     if (localStorage.getItem("visits") == null) {
+    //         getMeNumber = 0;
+    //     } else {
+    //         getMeNumber = parseInt(getMeNumber);
+    //     }
+    //     getMeNumber++;
+    //     localStorage.setItem("visits", getMeNumber.toString())
+    //     document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
+    // }
+
+
+
+// ONLINE EXAMPLE FOR COUNTER trying to figure it out
+    // var numTimes = localStorage.getItem("visits-Hlfma");
+    //     if(numTimes == null) {
+    //       numTimes = 0;
+    //     } else {
+    //       numTimes = parseInt(numTimes, 10);
+    //     }
+    //     numTimes++;
+    //     localStorage.setItem("visits-Hlfma", (numTimes).toString(10))
+    //     document.getElementById("visit-times").textContent = numTimes.toString(10);
+
 // Test code for getting all the stlyes from breweryDB:
 //  
     // function getBeerStyles() {
@@ -172,7 +217,7 @@ function LeftOver(yum_options, oven_options) {
         data.map(function(element, index) {
             flavor.push(element.flavors);
             // console.dir($.extend({}, element, beerPairer(index)));
-            return _.template(html, $.extend({}, element, beerPairer(index)));
+            return _.template(html, $.extend({}, beerPairer(index), element));
         }).join("");
     };
 
