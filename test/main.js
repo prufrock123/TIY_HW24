@@ -109,8 +109,6 @@ describe("Does this return an object or array?", function(){
 
 
 
-
-
 //--- your tests go here
 
 mocha.globals(["jQuery"]);

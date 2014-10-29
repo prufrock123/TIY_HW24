@@ -1,9 +1,79 @@
 
 window.onload = app;
 
+
 // Global variables
     flavor = [];
     styles = [];
+
+//notification click
+
+if(window.Notification){
+
+
+    window.addEventListener('load', function () {
+
+
+      
+      if (window.Notification && Notification.permission !== "granted") {
+        Notification.requestPermission(function (status) {
+          if (Notification.permission !== status) {
+            Notification.permission = status;
+          }
+        });
+      }
+
+      var button = document.querySelector('#button');
+
+      button.addEventListener('click', function () {
+        
+        if (window.Notification && Notification.permission === "granted") {
+          
+            var n = new Notification("Enjoy your meal!");
+          
+        }
+
+      
+        else if (window.Notification && Notification.permission !== "denied") {
+          Notification.requestPermission(function (status) {
+            if (Notification.permission !== status) {
+              Notification.permission = status;
+            }
+
+            if (status === "granted") {
+              
+                var n = new Notification("Enjoy your meal!");
+              
+            }
+
+            
+            else {
+              alert("Hi!");
+            }
+          });
+        }
+
+        else {
+          alert("Hi!");
+        }
+      });
+    });
+
+} else {
+    console.log("not supported");
+}
+
+
+// var n = new Notification("Enjoy your meal!")
+
+// if(event.target.id === '#button'){
+// n.onclick = function(){
+//     setTimeout(n.close.bind(n), 5000);
+// }
+// } else {
+//     console.log("test");
+// };
+
 
 // Test code for getting all the stlyes from breweryDB:
 //  
