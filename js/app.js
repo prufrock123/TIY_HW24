@@ -208,7 +208,7 @@ function LeftOver(yum_options, oven_options) {
     if(!oven_options.api_key) {
         throw new Error("Need your BigOven key too fool");
     }
-
+    debugger;
     this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
     this.yum_ingredient = "&allowedIngredient[]=";
     this.yum_course = "&allowedCourse[]=course^course-";
@@ -348,7 +348,7 @@ function LeftOver(yum_options, oven_options) {
     //     return styles;
     // }
 
-
+    this.pullRecipes();
 
     LeftOver.prototype.Routing = function(){
         "use strict";
