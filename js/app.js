@@ -348,8 +348,6 @@ function LeftOver(yum_options, oven_options) {
     //     return styles;
     // }
 
-    this.pullRecipes();
-
     LeftOver.prototype.Routing = function(){
         "use strict";
         var self = this;
