@@ -1,0 +1,33 @@
+{
+  "name": "TIY_HW24",
+  "version": "1.0.0",
+  "description": "Recipe App",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gulp-autoprefixer": "^1.0.1",
+    "express": "^4.10.1",
+    "gulp-jshint": "^1.8.5",
+    "lodash": "^2.4.1",
+    "method-override": "^2.3.0",
+    "gulp": "^3.8.9",
+    "request": "^2.47.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prufrock123/TIY_HW24.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prufrock123/TIY_HW24/issues"
+  },
+  "homepage": "https://github.com/prufrock123/TIY_HW24"
+}

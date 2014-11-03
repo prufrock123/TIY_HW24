@@ -325,7 +325,7 @@ function LeftOver(yum_options, oven_options) {
     LeftOver.prototype.getBeerStyles = function() {
        // var Beers = []
         return $.getJSON(
-            "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
+            "brewery/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
         .then(function(data, second, third){
             // debugger;
             // console.dir(data);
