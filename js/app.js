@@ -1,107 +1,98 @@
-
 window.onload = app;
 
 
 // Global variables
-    flavor = [];
-    styles = [];
+flavor = [];
+styles = [];
 
 
 // Test code for localStorage
 
-    // localStorage.setItem("visits", getMeNumber)
+// localStorage.setItem("visits", getMeNumber)
 
-    function counter() {
-        // debugger;
-        var getMeNumber = localStorage.getItem("visits");
-        if (getMeNumber == null || isNaN(getMeNumber)) {
-            getMeNumber = 0;
-        } else {
-            getMeNumber = parseInt(getMeNumber);
-        }
-        getMeNumber++;
-        localStorage.setItem("visits", getMeNumber.toString())
-        document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
+function counter() {
+    // debugger;
+    var getMeNumber = localStorage.getItem("visits");
+    if (getMeNumber == null || isNaN(getMeNumber)) {
+        getMeNumber = 0;
+    } else {
+        getMeNumber = parseInt(getMeNumber);
     }
+    getMeNumber++;
+    localStorage.setItem("visits", getMeNumber.toString())
+    document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
+}
 
-    counter();
+counter();
 
-    // function counter() {
-    //     var getMeNumber = localStorage.getItem("visits");
-    //     if (localStorage.getItem("visits") == null) {
-    //         getMeNumber = 0;
-    //     } else {
-    //         getMeNumber = parseInt(getMeNumber);
-    //     }
-    //     getMeNumber++;
-    //     localStorage.setItem("visits", getMeNumber.toString())
-    //     document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
-    // }
+// function counter() {
+//     var getMeNumber = localStorage.getItem("visits");
+//     if (localStorage.getItem("visits") == null) {
+//         getMeNumber = 0;
+//     } else {
+//         getMeNumber = parseInt(getMeNumber);
+//     }
+//     getMeNumber++;
+//     localStorage.setItem("visits", getMeNumber.toString())
+//     document.querySelector("#visited").innerHTML = localStorage.getItem("visits");
+// }
 
 
 
 // ONLINE EXAMPLE FOR COUNTER trying to figure it out
-    // var numTimes = localStorage.getItem("visits-Hlfma");
-    //     if(numTimes == null) {
-    //       numTimes = 0;
-    //     } else {
-    //       numTimes = parseInt(numTimes, 10);
-    //     }
-    //     numTimes++;
-    //     localStorage.setItem("visits-Hlfma", (numTimes).toString(10))
-    //     document.getElementById("visit-times").textContent = numTimes.toString(10);
+// var numTimes = localStorage.getItem("visits-Hlfma");
+//     if(numTimes == null) {
+//       numTimes = 0;
+//     } else {
+//       numTimes = parseInt(numTimes, 10);
+//     }
+//     numTimes++;
+//     localStorage.setItem("visits-Hlfma", (numTimes).toString(10))
+//     document.getElementById("visit-times").textContent = numTimes.toString(10);
 
 //notification click
 
-if(window.Notification){
+if (window.Notification) {
 
 
-    window.addEventListener('load', function () {
+    window.addEventListener('load', function() {
 
 
-      
-      if (window.Notification && Notification.permission !== "granted") {
-        Notification.requestPermission(function (status) {
-          if (Notification.permission !== status) {
-            Notification.permission = status;
-          }
-        });
-      }
 
-      var button = document.querySelector('#button');
-
-      button.addEventListener('click', function () {
-        
-        if (window.Notification && Notification.permission === "granted") {
-          
-            var n = new Notification("Enjoy your meal!");
-          
+        if (window.Notification && Notification.permission !== "granted") {
+            Notification.requestPermission(function(status) {
+                if (Notification.permission !== status) {
+                    Notification.permission = status;
+                }
+            });
         }
 
-      
-        else if (window.Notification && Notification.permission !== "denied") {
-          Notification.requestPermission(function (status) {
-            if (Notification.permission !== status) {
-              Notification.permission = status;
-            }
+        var button = document.querySelector('#button');
 
-            if (status === "granted") {
-              
+        button.addEventListener('click', function() {
+
+            if (window.Notification && Notification.permission === "granted") {
+
                 var n = new Notification("Enjoy your meal!");
-              
-            }
 
-            
-            else {
-              alert("Hi!");
-            }
-          });
-        }
+            } else if (window.Notification && Notification.permission !== "denied") {
+                Notification.requestPermission(function(status) {
+                    if (Notification.permission !== status) {
+                        Notification.permission = status;
+                    }
 
-        else {
-          alert("Hi!");
-        }
-      });
+                    if (status === "granted") {
+
+                        var n = new Notification("Enjoy your meal!");
+
+                    } else {
+                        alert("Hi!");
+                    }
+                });
+            } else {
+                alert("Hi!");
+            }
+        });
     });
 
 } else {
@@ -123,40 +114,42 @@ if(window.Notification){
 
 // Test code for getting all the stlyes from breweryDB:
 //  
-    // function getBeerStyles() {
-    //    // var Beers = []
-    //     return $.getJSON(
-    //         "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
-    //     .then(function(data, second, third){
-    //         // debugger;
-    //         // console.dir(data);
-    //         // console.dir(second);
-    //         // console.dir(third);
-    //         // console.dir(data.data);
-    //         var arrayOfStyles = data.data;
-    //         addBeersToStyles(arrayOfStyles);
-    //         // console.dir(arrayOfStyles);
-    //         // Beers.push(data.data);
-    //         // return data.data;
-    //         return arrayOfStyles;
-    //     });
-    // }
+// function getBeerStyles() {
+//    // var Beers = []
+//     return $.getJSON(
+//         "https://api.brewerydb.com/v2/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
+//     .then(function(data, second, third){
+//         // debugger;
+//         // console.dir(data);
+//         // console.dir(second);
+//         // console.dir(third);
+//         // console.dir(data.data);
+//         var arrayOfStyles = data.data;
+//         addBeersToStyles(arrayOfStyles);
+//         // console.dir(arrayOfStyles);
+//         // Beers.push(data.data);
+//         // return data.data;
+//         return arrayOfStyles;
+//     });
+// }
 //
 
 // 2 new beer functions
 function addBeersToStyles(array) {
     // console.dir(array);
-    styles.push(array[29], array[89], array[97], array[34], {name: "Sorry, there are no beer pairings for this recipe"});
+    styles.push(array[29], array[89], array[97], array[34], {
+        name: "Sorry, there are no beer pairings for this recipe"
+    });
     console.dir(styles);
     return styles;
 }
 
-function beerPairer(i){
-    if (!flavor[i]){
+function beerPairer(i) {
+    if (!flavor[i]) {
         return styles[4];
-    } else if (flavor[i].bitter > .15 && flavor[i].sweet > .5){
+    } else if (flavor[i].bitter > .15 && flavor[i].sweet > .5) {
         return styles[0];
-    } else if (flavor[i].sweet > .15){
+    } else if (flavor[i].sweet > .15) {
         return styles[1];
     } else {
         return styles[3];
@@ -165,29 +158,32 @@ function beerPairer(i){
 
 
 // runs when the DOM is loaded
-function app(){
+function app() {
     "use strict";
 
     // load some scripts (uses promises :D)
-    loader.load(
-        {url: "./bower_components/jquery/dist/jquery.min.js"},
-        {url: "./bower_components/lodash/dist/lodash.min.js"},
-        {url: "./bower_components/pathjs/path.min.js"},
-        {url: "./bower_components/foundation/js/foundation.js"}
-    ).then(function(){
+    loader.load({
+        url: "./bower_components/jquery/dist/jquery.min.js"
+    }, {
+        url: "./bower_components/lodash/dist/lodash.min.js"
+    }, {
+        url: "./bower_components/pathjs/path.min.js"
+    }, {
+        url: "./bower_components/foundation/js/foundation.js"
+    }).then(function() {
         _.templateSettings.interpolate = /{([\s\S]+?)}/g;
 
         // start app?
-    var yum_options = {
-        app_key: "4164fad3825e0f682dfe82b17b4acf89",
-        app_id: "2e7123cd"
-    };
+        var yum_options = {
+            app_key: "4164fad3825e0f682dfe82b17b4acf89",
+            app_id: "2e7123cd"
+        };
 
-    var oven_options = {
-        api_key: "dvxVx0d11bD2O2D8z4L627I15fZu05Em"
-    };
+        var oven_options = {
+            api_key: "dvxVx0d11bD2O2D8z4L627I15fZu05Em"
+        };
 
-    var recipe = new LeftOver(yum_options, oven_options);
+        var recipe = new LeftOver(yum_options, oven_options);
 
     });
 
@@ -201,22 +197,22 @@ function LeftOver(yum_options, oven_options) {
     if (!yum_options.app_key) {
         throw new Error("Not going to work w/o Yummly API key bruh");
     }
-    if(!yum_options.app_id) {
+    if (!yum_options.app_id) {
         throw new Error("Not going to work w/o Yummly ID key either");
-     }
+    }
 
-    if(!oven_options.api_key) {
+    if (!oven_options.api_key) {
         throw new Error("Need your BigOven key too fool");
     }
 
     this.yum_url = "http://api.yummly.com/v1/api/recipes?_app_id=";
     this.yum_ingredient = "&allowedIngredient[]=";
     this.yum_course = "&allowedCourse[]=course^course-";
-    this.app_id = yum_options.app_id;    
+    this.app_id = yum_options.app_id;
     this.app_key = yum_options.app_key;
     this.yum_complete_api_url = this.yum_url + this.app_id + "&_app_key=" + this.app_key;
 
-    
+
     this.oven_url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=";
     this.api_key = oven_options.api_key;
 
@@ -226,93 +222,120 @@ function LeftOver(yum_options, oven_options) {
     this.Routing();
 }
 
+// function referenceMissing(message, element) {
+//     this.message = message;
+//     this.name = referenceMissing;
+//     element.innerHTML = this.message;
+// }
 
 // function joyRide(){ 
 //     "use strict";
 //     $(document).foundation('joyride', 'start');
 // }
 
-    LeftOver.prototype.createInputObject = function() {
-        "use strict";
-        var input = {};
-        $(':input').each(function(){
+
+LeftOver.prototype.testInputs = function() {
+    "use strict";
+    var input = {};
+    var inputs = $(':input');
+    
+    var nothingIsEmpty = Array.prototype.slice.call(inputs).reduce(function(nothingEmpty, currentPointer){
+        return nothingEmpty && !!currentPointer.value;
+    }, true);
+
+
+    if (!nothingIsEmpty) {
+        window.location.replace("#/")
+        return true;
+    } else {
+        return false;
+    }
+};
+
+LeftOver.prototype.createInputObject = function() {
+    "use strict";
+    var input = {};
+    var inputs = $(':input');
+    
+    $(':input').each(function() {
         input[this.name] = this.value;
-        });
+    });
 
-        console.dir(input);
-        return input;
-    };
+    console.dir(input);
+    return input;
+};
 
-    LeftOver.prototype.pullRecipes = function() {
-        "use strict";
+LeftOver.prototype.pullRecipes = function() {
+    "use strict";
 
-        // callback();
-        var input = this.createInputObject();
+    // callback();
+    var input = this.createInputObject();
 
-        // console.dir(parameters);
-        // debugger;
+    // console.dir(parameters);
+    // debugger;
 
-        return $.getJSON(
-            this.yum_complete_api_url + this.yum_ingredient + input.protein + this.yum_ingredient + input.vegetable + this.yum_ingredient + input.carb + this.yum_course + input.course)  
-        .then(function(data){
+    return $.getJSON(
+            this.yum_complete_api_url + this.yum_ingredient + input.protein + this.yum_ingredient + input.vegetable + this.yum_ingredient + input.carb + this.yum_course + input.course)
+        .then(function(data) {
             console.log(data);
             return data.matches;
         });
-    };
+};
 
-    LeftOver.prototype.pullOvenRecipes = function(){
-        "use strict";
+LeftOver.prototype.pullOvenRecipes = function() {
+    "use strict";
 
-        var input = this.createInputObject();
+    var input = this.createInputObject();
 
-        return $.getJSON(
+    return $.getJSON(
             this.oven_url + input.protein + "&api_key=" + this.api_key)
-        .then(function(data){
+        .then(function(data) {
             console.log(data.Results);
             return data.Results;
         });
-    };
+};
 
-    LeftOver.prototype.loadTemplate = function(template) {
-        return $.get('./templates/' + template + '.html').then(function(htmlString){
-            return htmlString;
-        });
-    };
+LeftOver.prototype.loadTemplate = function(template) {
+    return $.get('./templates/' + template + '.html').then(function(htmlString) {
+        return htmlString;
+    });
+};
 
-    LeftOver.prototype.putRecipeOnPage = function(data, html) {
-        "use strict";
-        // debugger;
-        console.log(data);
-        console.log(html);
-        document.querySelector('#recipes').innerHTML = 
+LeftOver.prototype.putRecipeOnPage = function(data, html) {
+    "use strict";
+    // debugger;
+    console.log(data);
+    console.log(html);
+    document.querySelector('#recipes').innerHTML =
         data.map(function(element, index) {
+            // console.log()
             flavor.push(element.flavors);
             // console.dir($.extend({}, element, beerPairer(index)));
             return _.template(html, $.extend({}, beerPairer(index), element));
         }).join("");
-    };
+};
 
-    // What I want is something like:
-    // return _.template(html, $.extend({}, element, if (flavors[i].bitter > 0.15) then styles[0]));
-    // 
-    // So I will create a function beerPairer
-    // 
-    // function beerPairer(i){
-    // if (flavors[i].bitter > .15){
-    //          return styles[0];
-    //      } else if (flavors[i].sweet > .15){
-    //          return styles[1]
-    //      }
-    // }
+// What I want is something like:
+// return _.template(html, $.extend({}, element, if (flavors[i].bitter > 0.15) then styles[0]));
+// 
+// So I will create a function beerPairer
+// 
+// function beerPairer(i){
+// if (flavors[i].bitter > .15){
+//          return styles[0];
+//      } else if (flavors[i].sweet > .15){
+//          return styles[1]
+//      }
+// }
 
-    LeftOver.prototype.putOvenRecipeOnPage = function(data, html) {
-        "use strict";
-        console.log(data);
-        console.log(html);
-        document.querySelector('#ovenrecipes').innerHTML = 
+LeftOver.prototype.putOvenRecipeOnPage = function(data, html) {
+    "use strict";
+    console.log(data);
+    console.log(html);
+    document.querySelector('#ovenrecipes').innerHTML =
         data.map(function(element) {
-//            console.log(element.imageUrlsBySize)
-              console.log(element);
+            //            console.log(element.imageUrlsBySize)
+            console.log(element);
             // if(element.imageURL){
             //     return _.template(html, element);   
             // } else {
@@ -320,13 +343,13 @@ function LeftOver(yum_options, oven_options) {
             // }
             return _.template(html, element);
         }).join("");
-    };
+};
 
-    LeftOver.prototype.getBeerStyles = function() {
-       // var Beers = []
-        return $.getJSON(
+LeftOver.prototype.getBeerStyles = function() {
+    // var Beers = []
+    return $.getJSON(
             "/brewery/styles?key=a217c616e466264744fb362e60f8c99f&format=json")
-        .then(function(data, second, third){
+        .then(function(data, second, third) {
             // debugger;
             // console.dir(data);
             // console.dir(second);
@@ -339,35 +362,39 @@ function LeftOver(yum_options, oven_options) {
             // return data.data;
             return arrayOfStyles;
         });
-    }
+}
 
-    // LeftOver.prototype.addBeersToStyles = function(array) {
-    //     console.dir(array);
-    //     styles.push(array[29], array[89], array[97], array[34]);
-    //     console.dir(styles);
-    //     return styles;
-    // }
+// LeftOver.prototype.addBeersToStyles = function(array) {
+//     console.dir(array);
+//     styles.push(array[29], array[89], array[97], array[34]);
+//     console.dir(styles);
+//     return styles;
+// }
 
 
 
-    LeftOver.prototype.Routing = function(){
-        "use strict";
-        var self = this;
+LeftOver.prototype.Routing = function() {
+    "use strict";
+    var self = this;
 
-        // debugger;
-        // getBeerStyles();
-        
-        // addBeersToStyles(getBeerStyles());
-        // Path.map("#/").to(joyRide);
+    // debugger;
+    // getBeerStyles();
 
-        Path.map("#/results").to(function() {
+    // addBeersToStyles(getBeerStyles());
+    // Path.map("#/").to(joyRide);
+
+
+    Path.map("#/results").to(function() {
+        if(self.testInputs()){ 
+            return;
+        } else {
             $.when(
                 self.pullRecipes(),
                 self.pullOvenRecipes(),
                 self.loadTemplate('recipes'),
                 self.loadTemplate('ovenrecipes'),
                 self.getBeerStyles()
-            ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) {  //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
+            ).then(function(yumdata, ovendata, recipeHtml, ovenHtml) { //data has to be called first because  self.pullRecipes is being brought in first which takes "data", then loadTemplate takes the html
                 // debugger;
                 // console.log(yumdata)
                 // console.log(ovendata)
@@ -377,9 +404,11 @@ function LeftOver(yum_options, oven_options) {
                 console.log(flavor);
 
             });
-        });
+        };
+    });
 
-        $("#/refresh").click(function() {
+    if ($(':input') !== null) {
+        $("#refresh").click(function() {
             $.when(
                 self.pullRecipes(),
                 self.pullOvenRecipes(),
@@ -392,33 +421,34 @@ function LeftOver(yum_options, oven_options) {
                 console.log(flavor);
 
             });
-        });        
-
-        Path.root("#/");
-        Path.listen();
+        });
     };
 
+    Path.root("#/");
+    Path.listen();
+};
+
 // scrap notes
-    // this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
-    // Turning our completed form into a JSON object that we can pass to the pullRecipes function.
-    // var form = document.querySelector("form");
+// this.complete_api_url + "&q=onion+soup&allowedIngredient[]=" + parameters.protein + "&" + parameters.vegetable + "&" + parameters.carb)
+// Turning our completed form into a JSON object that we can pass to the pullRecipes function.
+// var form = document.querySelector("form");
 
-    // function ConvertFormToJSON(form){
-    //     var array = form.serializeArray();
-    //     var json = {};
+// function ConvertFormToJSON(form){
+//     var array = form.serializeArray();
+//     var json = {};
 
-    //     jQuery.each(array, function() {
-    //         json[this.name] = this.value || ''; 
-    //     });
-    // }
+//     jQuery.each(array, function() {
+//         json[this.name] = this.value || ''; 
+//     });
+// }
 
-    // var parameters = 
+// var parameters = 
 
 
-    // {
-    //     protein = value from form,
-    //     vegetable = value from form,
-    //     carb = value from form
-    // }
+// {
+//     protein = value from form,
+//     vegetable = value from form,
+//     carb = value from form
+// }
 
 //test
